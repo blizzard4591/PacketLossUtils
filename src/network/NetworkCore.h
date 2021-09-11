@@ -28,7 +28,7 @@ namespace packagelossutils {
 			QTimer m_timerPing;
 			QTimer m_timerTimeout;
 			
-			virtual void receivedMessage(QHostAddress const& address, quint16 port, std::shared_ptr<Message> const& message) {}
+			virtual void receivedMessage(QHostAddress const&, quint16, std::shared_ptr<Message> const&) {}
 
 			static std::shared_ptr<Message> parseIncomingMessage(QByteArray const& data);
 		};
