@@ -127,6 +127,11 @@ namespace packagelossutils {
 			Message::MessageType const messageType = message->getMessageType();
 			LOGGER_DEBUG("Client received datagram of type {} from {}:{}.", static_cast<int>(messageType), address.toString().toStdString(), port);
 
+			if ((address != m_serverHostAddress) || (port != m_serverPort)) {
+				LOGGER()->warn("Received a message from {}:{}, but we are expecting them from {}:{}. Ignoring!", address.toString().toStdString(), port, m_serverHostAddress.toString().toStdString(), m_serverPort);
+				return;
+			}
+
 			if (messageType == Message::MessageType::MSGTYPE_PING) {
 				std::shared_ptr<PingMessage> const pingMessage = std::dynamic_pointer_cast<PingMessage>(message);
 
