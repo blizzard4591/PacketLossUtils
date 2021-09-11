@@ -28,7 +28,7 @@ bool initializeLogging(std::size_t maxLogfileSize, std::size_t maxFileCount) {
 #endif
 	QString const writableLocationString = QStandardPaths::writableLocation(location);
 	
-	QString logFileName = "remoteFunServer.log";
+	QString logFileName = "packetLossUtils.log";
 	if (writableLocationString.isNull() || writableLocationString.isEmpty()) {
 		std::cerr << "Qt StandardPaths returned no writable location, defaulting to local." << std::endl;
 	} else {
@@ -36,7 +36,7 @@ bool initializeLogging(std::size_t maxLogfileSize, std::size_t maxFileCount) {
 		if (!folder.mkpath(writableLocationString)) {
 			std::cerr << "Could not create directory for log files \"" << writableLocationString.toStdString() << "\", defaulting to local." << std::endl;
 		} else {
-			logFileName = folder.absoluteFilePath("remoteFunServer.log");
+			logFileName = folder.absoluteFilePath("packetLossUtils.log");
 		}
 	}
 	
