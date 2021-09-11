@@ -53,7 +53,7 @@ namespace packagelossutils {
 			bool receivedReply = false;
 			for (int i = 0; i < 10; ++i) {
 				QThread::msleep(100);
-				if (m_udpSocket->hasPendingDatagrams()) {
+				if (m_udpSocket->hasPendingDatagrams() && (m_udpSocket->pendingDatagramSize() > 0)) {
 					receivedReply = true;
 					break;
 				}

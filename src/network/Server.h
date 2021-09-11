@@ -40,6 +40,8 @@ namespace packagelossutils {
 			qint64 m_nextPingTime;
 
 			virtual void receivedMessage(QHostAddress const& address, quint16 port, std::shared_ptr<Message> const& message) override;
+
+			void startOrStopTimersIfNeeded();
 		};
 	}
 }

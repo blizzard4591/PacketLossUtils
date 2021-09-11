@@ -1,7 +1,7 @@
 #include <QCoreApplication>
 #include <QtCore>
 #include <QCommandLineParser>
-#include <QSslSocket>
+#include <QHostInfo>
 
 #include "Init.h"
 #include "src/network/Client.h"
@@ -11,14 +11,10 @@
 #include <cstdlib>
 #include <cstdint>
 
-Q_DECLARE_METATYPE(QSslSocket::SslMode);
-
 int main(int argc, char *argv[]) {
     if (!initializeLogging(PACKAGELOSSUTILS_LOGGING_MAX_FILESIZE, PACKAGELOSSUTILS_LOGGING_MAX_FILECOUNT)) {
         return -2;
     }
-
-	qRegisterMetaType<QSslSocket::SslMode>();
 
 	// Set encoding
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
@@ -53,7 +49,7 @@ int main(int argc, char *argv[]) {
 		parser.addVersionOption();
 
 		QCommandLineOption serverOption(QStringList() << "s" << "server", QCoreApplication::translate("main", "Run in Server mode"));
-		QCommandLineOption clientOption(QStringList() << "c" << "client", QCoreApplication::translate("main", "Run in Client mode"));
+		QCommandLineOption clientOption(QStringList() << "c" << "client", QCoreApplication::translate("main", "Run in Client mode"), "server:port", "127.0.0.1:12702");
 
 		if (!parser.addOption(serverOption)) {
 			LOGGER()->error("Failed to add 'serverOption' option!");
@@ -91,11 +87,31 @@ int main(int argc, char *argv[]) {
 			LOGGER()->debug("Starting event loop.");
 			result = app.exec();
 		} else if (parser.isSet(clientOption)) {
-			packagelossutils::network::Client client(QHostAddress(QHostAddress::LocalHost), 12702, 250, &app);
-			client.connect();
+			QString const optionValue = parser.value(clientOption);
+			QString serverAddress = (optionValue.isEmpty()) ? "127.0.0.1" : optionValue;
+			quint16 serverPort = 12702;
+			int const pos = serverAddress.lastIndexOf(':');
+			if (pos != -1) {
+				serverPort = serverAddress.mid(pos + 1).toUInt();
+				serverAddress = serverAddress.left(pos);
+			}
 
-			LOGGER()->debug("Starting event loop.");
-			result = app.exec();
+			QHostInfo const hostInfo = QHostInfo::fromName(serverAddress);
+			if (!hostInfo.addresses().isEmpty()) {
+				QHostAddress address = hostInfo.addresses().first();
+				// use the first IP address
+				LOGGER_DEBUG("Using server '{}' with port {}. Input: '{}'", address.toString().toStdString(), serverPort, optionValue.toStdString());
+				packagelossutils::network::Client client(address, serverPort, 250, &app);
+				if (!client.connect()) {
+					return -3;
+				}
+
+				LOGGER()->debug("Starting event loop.");
+				result = app.exec();
+			} else {
+				LOGGER()->error("Could not resolve given server!");
+				result = -2;
+			}
 		} else {
 			LOGGER()->error("Don't know what to do. Good bye.");
 		}

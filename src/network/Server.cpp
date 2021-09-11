@@ -82,10 +82,31 @@ namespace packagelossutils {
 					m_udpSocket->writeDatagram(closeMessage.getData(), clientInfo->address, clientInfo->port);
 
 					m_clientInfos.remove(i.key());
+					
 					// Since the Iterator may be invalid, restart.
 					onTimeoutTimer();
+
+					startOrStopTimersIfNeeded();
 					return;
 				}
+			}
+		}
+
+		void Server::startOrStopTimersIfNeeded() {
+			if (m_clientInfos.size() > 0) {
+				if (!m_timerPing.isActive()) {
+					// Set up ping timer
+					m_timerPing.setInterval(BASE_TIMER_INTERVAL);
+					m_timerPing.start();
+					m_nextPingTime = QDateTime::currentMSecsSinceEpoch() + BASE_TIMER_INTERVAL;
+
+					// Set up timeout timer
+					m_timerTimeout.setInterval(100);
+					m_timerTimeout.start();
+				}
+			} else {
+				m_timerPing.stop();
+				m_timerTimeout.stop();
 			}
 		}
 
@@ -145,14 +166,7 @@ namespace packagelossutils {
 				// Send answer - currently just a copy of the welcome
 				m_udpSocket->writeDatagram(welcomeMessage->getData(), address, port);
 
-				// Set up ping timer
-				m_timerPing.setInterval(BASE_TIMER_INTERVAL);
-				m_timerPing.start();
-				m_nextPingTime = QDateTime::currentMSecsSinceEpoch() + BASE_TIMER_INTERVAL;
-
-				// Set up timeout timer
-				m_timerTimeout.setInterval(100);
-				m_timerTimeout.start();
+				startOrStopTimersIfNeeded();
 			} else if (messageType == Message::MessageType::MSGTYPE_QUIT) {
 				std::shared_ptr<CloseMessage> const closeMessage = std::dynamic_pointer_cast<CloseMessage>(message);
 				quint64 const uniqueId = closeMessage->getUniqueId();
