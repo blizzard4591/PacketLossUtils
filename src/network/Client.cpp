@@ -30,7 +30,7 @@ namespace packagelossutils {
 				throw packagelossutils::exceptions::InternalErrorException() << "Failed to bind onStatsTimer() on Timer!";
 			}
 
-			LOGGER_DEBUG("Client configured for {}:{} with unique ID {} and interval {}.", m_serverHostAddress.toString().toStdString(), (int)m_serverPort, m_uniqueId, m_interval);
+			LOGGER_DEBUG("Client configured for {}:{} with unique ID {} and interval {}.", m_serverHostAddress.toString().toStdString(), m_serverPort, m_uniqueId, m_interval);
 		}
 
 		Client::~Client() {
@@ -60,7 +60,7 @@ namespace packagelossutils {
 			}
 
 			if (!receivedReply) {
-				LOGGER()->error("Failed to connect to server {}:{}.", m_serverHostAddress.toString().toStdString(), (int)m_serverPort);
+				LOGGER()->error("Failed to connect to server {}:{}.", m_serverHostAddress.toString().toStdString(), m_serverPort);
 				return false;
 			}
 			m_timeOfLastMessageFromOther = QDateTime::currentMSecsSinceEpoch();
