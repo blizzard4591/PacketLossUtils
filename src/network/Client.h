@@ -16,6 +16,7 @@ namespace packagelossutils {
 
 			bool connect();
 
+			void setDebugPingStats(bool doDebug);
 		public slots:
 			virtual void onPingTimer() override;
 			virtual void onTimeoutTimer() override;
@@ -37,6 +38,8 @@ namespace packagelossutils {
 			PingStats m_clientStats;
 
 			qint64 m_nextPingTime;
+
+			bool m_doPingStatDebug;
 
 			virtual void receivedMessage(QHostAddress const& address, quint16 port, std::shared_ptr<Message> const& message) override;
 		};

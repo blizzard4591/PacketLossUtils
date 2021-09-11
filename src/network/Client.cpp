@@ -23,7 +23,7 @@ namespace packagelossutils {
 			m_uniqueId(QRandomGenerator::global()->generate64()), m_interval(interval), m_isConnected(false), 
 			m_timerStats(this),
 			m_messageCounter(0), m_messageCounterOtherNextExpected(0), m_timeOfLastMessageFromOther(-1),
-			m_otherStats(PingStats::initialize()), m_clientStats(PingStats::initialize()), m_nextPingTime(0)
+			m_otherStats(PingStats::initialize()), m_clientStats(PingStats::initialize()), m_nextPingTime(0), m_doPingStatDebug(false)
 		{
 			//
 			if (!QObject::connect(&m_timerStats, SIGNAL(timeout()), this, SLOT(onStatsTimer()))) {
@@ -39,6 +39,10 @@ namespace packagelossutils {
 				CloseMessage closeMessage(m_uniqueId, CloseMessage::REASON_QUIT);
 				m_udpSocket->writeDatagram(closeMessage.getData(), m_serverHostAddress, m_serverPort);
 			}
+		}
+
+		void Client::setDebugPingStats(bool doDebug) {
+			m_doPingStatDebug = doDebug;
 		}
 
 		bool Client::connect() {
@@ -121,7 +125,15 @@ namespace packagelossutils {
 			LOGGER()->info("------------------------");
 			LOGGER()->info("Transmission rate INCOMING (10s/1min/5min): {:.3f}% / {:.3f}% / {:.3f}%)", m_clientStats.getPercentReceivedOverTime((10ul * 1000ul) / m_interval), m_clientStats.getPercentReceivedOverTime((60ul * 1000ul) / m_interval), m_clientStats.getPercentReceivedOverTime((5ul * 60ul * 1000ul) / m_interval));
 			LOGGER()->info("Transmission rate OUTGOING (10s/1min/5min): {:.3f}% / {:.3f}% / {:.3f}%)", m_otherStats.getPercentReceivedOverTime((10ul * 1000ul) / m_interval), m_otherStats.getPercentReceivedOverTime((60ul * 1000ul) / m_interval), m_otherStats.getPercentReceivedOverTime((5ul * 60ul * 1000ul) / m_interval));
-			//std::cout << m_otherStats.toString().toStdString() << std::endl;
+			if (m_doPingStatDebug) {
+				LOGGER()->info(m_otherStats.toString().toStdString());
+				QByteArray result;
+				{
+					QDataStream stream(&result, QIODevice::WriteOnly);
+					stream << m_otherStats;
+				}
+				std::cout << QString(result.toHex()).toStdString() << std::endl;
+			}
 		}
 
 		void Client::receivedMessage(QHostAddress const& address, quint16 port, std::shared_ptr<Message> const& message) {

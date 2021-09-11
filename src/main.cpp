@@ -50,6 +50,7 @@ int main(int argc, char *argv[]) {
 
 		QCommandLineOption serverOption(QStringList() << "s" << "server", QCoreApplication::translate("main", "Run in Server mode"));
 		QCommandLineOption clientOption(QStringList() << "c" << "client", QCoreApplication::translate("main", "Run in Client mode"), "server:port", "127.0.0.1:12702");
+		QCommandLineOption debugOption(QStringList() << "d" << "debug", QCoreApplication::translate("main", "Show additional runtime debug output"));
 
 		if (!parser.addOption(serverOption)) {
 			LOGGER()->error("Failed to add 'serverOption' option!");
@@ -57,29 +58,12 @@ int main(int argc, char *argv[]) {
 		if (!parser.addOption(clientOption)) {
 			LOGGER()->error("Failed to add 'clientOption' option!");
 		}
+		if (!parser.addOption(debugOption)) {
+			LOGGER()->error("Failed to add 'debugOption' option!");
+		}
 
 		// Process the actual command line arguments given by the user
 		parser.process(app);
-
-		/*
-		QString certificateFileName = "server.crt";
-		if (parser.isSet(certOption)) {
-			LOGGER_DEBUG("Certificate cmd option is set, using value '{}'", parser.value(certOption).toStdString());
-			certificateFileName = parser.value(certOption);
-		}
-
-		QString keyFileName = "server.key";
-		if (parser.isSet(keyOption)) {
-			LOGGER_DEBUG("Key cmd option is set, using value '{}'", parser.value(keyOption).toStdString());
-			keyFileName = parser.value(keyOption);
-		}
-
-		QString chainFileName = "chain.crt";
-		if (parser.isSet(chainOption)) {
-			LOGGER_DEBUG("Chain cmd option is set, using value '{}'", parser.value(chainOption).toStdString());
-			chainFileName = parser.value(chainOption);
-		}
-		*/
 
 		if (parser.isSet(serverOption)) {
 			packagelossutils::network::Server server(12702, &app);
@@ -102,6 +86,9 @@ int main(int argc, char *argv[]) {
 				// use the first IP address
 				LOGGER_DEBUG("Using server '{}' with port {}. Input: '{}'", address.toString().toStdString(), serverPort, optionValue.toStdString());
 				packagelossutils::network::Client client(address, serverPort, 250, &app);
+				if (parser.isSet(debugOption)) {
+					client.setDebugPingStats(true);
+				}
 				if (!client.connect()) {
 					return -3;
 				}
