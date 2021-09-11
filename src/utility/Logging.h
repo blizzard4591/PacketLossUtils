@@ -11,7 +11,7 @@
 #	endif
 #	define PACKAGELOSSUTILS_LOGGING_LEVEL spdlog::level::debug
 #else
-#	define PACKAGELOSSUTILS_LOGGING_LEVEL spdlog::level::warn
+#	define PACKAGELOSSUTILS_LOGGING_LEVEL spdlog::level::info
 #endif
 
 #define SPDLOG_HEADER_ONLY

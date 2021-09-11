@@ -119,8 +119,8 @@ namespace packagelossutils {
 
 		void Client::onStatsTimer() {
 			LOGGER()->info("------------------------");
-			LOGGER()->info("Transmission rate INCOMING (10s/1min/5min): {}% / {}% / {}%)", m_clientStats.getPercentReceivedOverTime((10ul * 1000ul) / m_interval), m_clientStats.getPercentReceivedOverTime((60ul * 1000ul) / m_interval), m_clientStats.getPercentReceivedOverTime((5ul * 60ul * 1000ul) / m_interval));
-			LOGGER()->info("Transmission rate OUTGOING (10s/1min/5min): {}% / {}% / {}%)", m_otherStats.getPercentReceivedOverTime((10ul * 1000ul) / m_interval), m_otherStats.getPercentReceivedOverTime((60ul * 1000ul) / m_interval), m_otherStats.getPercentReceivedOverTime((5ul * 60ul * 1000ul) / m_interval));
+			LOGGER()->info("Transmission rate INCOMING (10s/1min/5min): {:.3f}% / {:.3f}% / {:.3f}%)", m_clientStats.getPercentReceivedOverTime((10ul * 1000ul) / m_interval), m_clientStats.getPercentReceivedOverTime((60ul * 1000ul) / m_interval), m_clientStats.getPercentReceivedOverTime((5ul * 60ul * 1000ul) / m_interval));
+			LOGGER()->info("Transmission rate OUTGOING (10s/1min/5min): {:.3f}% / {:.3f}% / {:.3f}%)", m_otherStats.getPercentReceivedOverTime((10ul * 1000ul) / m_interval), m_otherStats.getPercentReceivedOverTime((60ul * 1000ul) / m_interval), m_otherStats.getPercentReceivedOverTime((5ul * 60ul * 1000ul) / m_interval));
 			//std::cout << m_otherStats.toString().toStdString() << std::endl;
 		}
 
