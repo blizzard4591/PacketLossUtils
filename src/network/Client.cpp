@@ -98,6 +98,7 @@ namespace packagelossutils {
 
 			if (!skipMessage) {
 				m_udpSocket->writeDatagram(pingMessage.getData(), m_serverHostAddress, m_serverPort);
+				m_clientStats.addPacketSent();
 				LOGGER_DEBUG("Sent ping #{} to server.", m_messageCounter - 1);
 			} else {
 				LOGGER()->warn("PingTimer was delayed, skipping ping #{} to server.", m_messageCounter - 1);
@@ -127,7 +128,7 @@ namespace packagelossutils {
 			Message::MessageType const messageType = message->getMessageType();
 			LOGGER_DEBUG("Client received datagram of type {} from {}:{}.", static_cast<int>(messageType), address.toString().toStdString(), port);
 
-			if ((address != m_serverHostAddress) || (port != m_serverPort)) {
+			if ((!address.isEqual(m_serverHostAddress)) || (port != m_serverPort)) {
 				LOGGER()->warn("Received a message from {}:{}, but we are expecting them from {}:{}. Ignoring!", address.toString().toStdString(), port, m_serverHostAddress.toString().toStdString(), m_serverPort);
 				return;
 			}
@@ -154,6 +155,7 @@ namespace packagelossutils {
 
 				// Mark the current message as seen
 				m_clientStats.addResult(true);
+				m_clientStats.addPacketReceived();
 				++m_messageCounterOtherNextExpected;
 
 				m_otherStats = pingMessage->getPingStats();

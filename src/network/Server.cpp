@@ -53,6 +53,7 @@ namespace packagelossutils {
 					clientInfo->intervalCounter = 0;
 					if (!skipMessage) {
 						m_udpSocket->writeDatagram(pingMessage.getData(), clientInfo->address, clientInfo->port);
+						clientInfo->pingStats.addPacketSent();
 						LOGGER_DEBUG("Sent ping #{} to client #{}.", clientInfo->messageCounter - 1, i.key());
 					} else {
 						LOGGER()->warn("PingTimer was delayed, skipping ping #{} to client #{}.", clientInfo->messageCounter - 1, i.key());
@@ -140,6 +141,7 @@ namespace packagelossutils {
 
 					// Mark the current message as seen
 					clientInfo->pingStats.addResult(true);
+					clientInfo->pingStats.addPacketReceived();
 					++clientInfo->messageCounterOtherNextExpected;
 
 					clientInfo->timeOfLastMessageFromOther = QDateTime::currentMSecsSinceEpoch();
