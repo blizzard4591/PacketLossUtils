@@ -11,9 +11,18 @@ namespace packagelossutils {
 			Message(QByteArray const& data);
 			virtual ~Message();
 
-			static Message buildStartMessage(quint64 key);
-
 			QByteArray const& getData() const;
+
+			static QByteArray prependMessageId(QByteArray const& data, quint32 messageId);
+			static QByteArray extractMessageId(QByteArray const& data, quint32& messageId, bool& ok);
+
+			enum class MessageType {
+				MSGTYPE_WELCOME,
+				MSGTYPE_PING,
+				MSGTYPE_QUIT,
+			};
+
+			virtual MessageType getMessageType() const = 0;
 		protected:
 			//
 		private:

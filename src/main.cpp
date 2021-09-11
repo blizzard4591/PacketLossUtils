@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 			LOGGER()->debug("Starting event loop.");
 			result = app.exec();
 		} else if (parser.isSet(clientOption)) {
-			packagelossutils::network::Client client(QHostAddress(QHostAddress::LocalHost), 12702, &app);
+			packagelossutils::network::Client client(QHostAddress(QHostAddress::LocalHost), 12702, 250, &app);
 			client.connect();
 
 			LOGGER()->debug("Starting event loop.");
