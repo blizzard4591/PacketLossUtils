@@ -29,13 +29,15 @@ endif()
 # Add SpgLog Includes
 include_directories("${SPDLOG_MODULE_BASEPATH}/include")
 
-if(CMAKE_COMPILER_IS_GNUCC)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	message(STATUS "Compiler is GNU g++")
 	# Set standard flags for GCC
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -funroll-loops -O4 -fvisibility=hidden")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -Wall -Wextra -Wold-style-cast -pedantic")
 	set(CMAKE_CXX_STANDARD 20)
 	set(CMAKE_CXX_STANDARD_REQUIRED ON)
-elseif(MSVC)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+	message(STATUS "Compiler is MSVC")
 	set (CMAKE_CXX_STANDARD 20)
 	set (CMAKE_CXX_STANDARD_REQUIRED ON)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL")
@@ -44,7 +46,8 @@ elseif(MSVC)
 	add_definitions(/D_CRT_SECURE_NO_WARNINGS)
 	add_definitions(/DNOMINMAX)
 	add_definitions(/DWIN32_LEAN_AND_MEAN)
-else(CLANG)
+else(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	message(STATUS "Compiler is Clang")
 	# As CLANG is not set as a variable, we need to set it in case we have not matched another compiler.
 	set (CLANG ON)
 	# Set standard flags for clang
