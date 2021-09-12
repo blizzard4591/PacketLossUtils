@@ -1,5 +1,5 @@
-#ifndef PACKAGELOSSUTILS_NETWORK_PINGSTATS_H_
-#define PACKAGELOSSUTILS_NETWORK_PINGSTATS_H_
+#ifndef PACKETLOSSUTILS_NETWORK_PINGSTATS_H_
+#define PACKETLOSSUTILS_NETWORK_PINGSTATS_H_
 
 #include <QBitArray>
 #include <QDataStream>
@@ -8,7 +8,7 @@
 
 #include "src/network/Message.h"
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 		class PingStats {
 		public:
@@ -51,7 +51,7 @@ namespace packagelossutils {
 	}
 }
 
-QDataStream& operator<< (QDataStream& stream, const packagelossutils::network::PingStats& t);
-//QDataStream& operator>> (QDataStream& stream, packagelossutils::network::PingStats& t);
+QDataStream& operator<< (QDataStream& stream, const packetlossutils::network::PingStats& t);
+//QDataStream& operator>> (QDataStream& stream, packetlossutils::network::PingStats& t);
 
 #endif

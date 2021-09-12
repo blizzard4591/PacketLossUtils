@@ -1,5 +1,5 @@
-#ifndef PACKAGELOSSUTILS_NETWORK_SERVER_H_
-#define PACKAGELOSSUTILS_NETWORK_SERVER_H_
+#ifndef PACKETLOSSUTILS_NETWORK_SERVER_H_
+#define PACKETLOSSUTILS_NETWORK_SERVER_H_
 
 #include "src/network/NetworkCore.h"
 #include "src/network/PingStats.h"
@@ -7,7 +7,7 @@
 #include <QMap>
 #include <QTimer>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 		class Server : public NetworkCore {
 			Q_OBJECT

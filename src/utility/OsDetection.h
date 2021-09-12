@@ -1,5 +1,5 @@
-#ifndef PACKAGELOSSUTILS_UTILITY_OSDETECTION_H_
-#define PACKAGELOSSUTILS_UTILITY_OSDETECTION_H_
+#ifndef PACKETLOSSUTILS_UTILITY_OSDETECTION_H_
+#define PACKETLOSSUTILS_UTILITY_OSDETECTION_H_
 
 #if defined __linux__ || defined __linux
 #	define LINUX
@@ -29,7 +29,7 @@
 #	error Could not detect Operating System
 #endif
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace utility {
 		//
 	}

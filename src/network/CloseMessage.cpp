@@ -6,7 +6,7 @@
 #include <QString>
 #include <QStringList>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		CloseMessage::CloseMessage(quint64 uniqueId, quint32 reason) : Message(toData(uniqueId, reason)), m_uniqueId(uniqueId), m_reason(reason) {
@@ -22,17 +22,17 @@ namespace packagelossutils {
 			QStringList const parts = message.split('\n');
 
 			if (parts.size() != 2) {
-				throw packagelossutils::exceptions::ProtocolErrorException() << "Close Message from server had " << parts.size() << " parts, we expected 2. Message: '" << message.toStdString() << "'.";
+				throw packetlossutils::exceptions::ProtocolErrorException() << "Close Message from server had " << parts.size() << " parts, we expected 2. Message: '" << message.toStdString() << "'.";
 			}
 
 			bool ok = false;
 			quint64 const uniqueId = parts.at(0).toULongLong();
 			if (!ok) {
-				throw packagelossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand uniqueID '" << parts.at(0).toStdString() << "'. Message: '" << message.toStdString() << "'.";
+				throw packetlossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand uniqueID '" << parts.at(0).toStdString() << "'. Message: '" << message.toStdString() << "'.";
 			}
 			quint32 const reason = parts.at(1).toUInt(&ok);
 			if (!ok) {
-				throw packagelossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand reason '" << parts.at(1).toStdString() << "'. Message: '" << message.toStdString() << "'.";
+				throw packetlossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand reason '" << parts.at(1).toStdString() << "'. Message: '" << message.toStdString() << "'.";
 			}
 			return CloseMessage(uniqueId, reason);
 		}

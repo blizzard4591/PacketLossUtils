@@ -1,12 +1,12 @@
-#ifndef PACKAGELOSSUTILS_EXCEPTIONS_BASEEXCEPTION_H_
-#define PACKAGELOSSUTILS_EXCEPTIONS_BASEEXCEPTION_H_
+#ifndef PACKETLOSSUTILS_EXCEPTIONS_BASEEXCEPTION_H_
+#define PACKETLOSSUTILS_EXCEPTIONS_BASEEXCEPTION_H_
 
 #include <exception>
 #include <sstream>
 
 #include "src/utility/OsDetection.h"
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace exceptions {
 
 		/*!
@@ -63,4 +63,4 @@ namespace packagelossutils {
 	}
 }
 
-#endif // PACKAGELOSSUTILS_EXCEPTIONS_BASEEXCEPTION_H_
+#endif // PACKETLOSSUTILS_EXCEPTIONS_BASEEXCEPTION_H_

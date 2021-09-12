@@ -1,9 +1,9 @@
-#ifndef PACKAGELOSSUTILS_NETWORK_MESSAGE_H_
-#define PACKAGELOSSUTILS_NETWORK_MESSAGE_H_
+#ifndef PACKETLOSSUTILS_NETWORK_MESSAGE_H_
+#define PACKETLOSSUTILS_NETWORK_MESSAGE_H_
 
 #include <QByteArray>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		class Message {

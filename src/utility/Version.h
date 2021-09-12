@@ -1,17 +1,17 @@
-#ifndef PACKAGELOSSUTILS_UTILITY_VERSION_H_
-#define PACKAGELOSSUTILS_UTILITY_VERSION_H_
+#ifndef PACKETLOSSUTILS_UTILITY_VERSION_H_
+#define PACKETLOSSUTILS_UTILITY_VERSION_H_
 #include <string>
 #include <sstream>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace utility {
 
 		struct Version {
-			/// The major version of PackageLossUtils
+			/// The major version of PacketLossUtils
 			const static unsigned versionMajor;
-			/// The minor version of PackageLossUtils
+			/// The minor version of PacketLossUtils
 			const static unsigned versionMinor;
-			/// The patch version of PackageLossUtils
+			/// The patch version of PacketLossUtils
 			const static unsigned versionPatch;
 			/// The short hash of the git commit this build is bases on
 			const static std::string gitRevisionHash;
@@ -19,15 +19,15 @@ namespace packagelossutils {
 			const static unsigned commitsAhead;
 			/// 0 iff no files were modified in the checkout, 1 else
 			const static unsigned dirty;
-			/// The system which has compiled PackageLossUtils
+			/// The system which has compiled PacketLossUtils
 			const static std::string systemName;
-			/// The size of a pointer of the system that has compiled PackageLossUtils
+			/// The size of a pointer of the system that has compiled PacketLossUtils
 			const static std::string systemPtrSize;
-			/// The system version which has compiled PackageLossUtils
+			/// The system version which has compiled PacketLossUtils
 			const static std::string systemVersion;
-			/// The build type that was used to build PackageLossUtils
+			/// The build type that was used to build PacketLossUtils
 			const static std::string buildType;
-			/// The compiler version that was used to build PackageLossUtils
+			/// The compiler version that was used to build PacketLossUtils
 			const static std::string cxxCompiler;
 
 			static std::string versionWithTagString() {

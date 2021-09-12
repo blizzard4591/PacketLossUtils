@@ -1,6 +1,6 @@
 #include "src/exceptions/BaseException.h"
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace exceptions {
 
 		BaseException::BaseException(char const* file, int line) : std::exception() {

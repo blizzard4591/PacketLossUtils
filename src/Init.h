@@ -1,5 +1,5 @@
-#ifndef PACKAGELOSSUTILS_INIT_H_
-#define PACKAGELOSSUTILS_INIT_H_
+#ifndef PACKETLOSSUTILS_INIT_H_
+#define PACKETLOSSUTILS_INIT_H_
 
 #include <cstdint>
 #include <iostream>
@@ -52,10 +52,10 @@ bool initializeLogging(std::size_t maxLogfileSize, std::size_t maxFileCount) {
 		std::vector<spdlog::sink_ptr> sinks;
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_st>());
 		sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>(logFileName.toStdString(), maxLogfileSize, maxFileCount));
-		auto combined_logger = std::make_shared<spdlog::logger>(PACKAGELOSSUTILS_LOGGING_LOGGER_MAIN_NAME, begin(sinks), end(sinks));
+		auto combined_logger = std::make_shared<spdlog::logger>(PACKETLOSSUTILS_LOGGING_LOGGER_MAIN_NAME, begin(sinks), end(sinks));
 
 		// Set log level depending on Build Type
-		combined_logger->set_level(PACKAGELOSSUTILS_LOGGING_LEVEL);
+		combined_logger->set_level(PACKETLOSSUTILS_LOGGING_LEVEL);
 
 		spdlog::register_logger(combined_logger);
 	} catch (const spdlog::spdlog_ex& ex) {

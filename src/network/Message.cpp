@@ -5,7 +5,7 @@
 #include <QString>
 #include <QtEndian>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		Message::Message(QByteArray const& data) : m_data(data) {
@@ -30,7 +30,7 @@ namespace packagelossutils {
 		QByteArray Message::extractMessageId(QByteArray const& data, quint32& messageId, bool& ok) {
 			ok = false;
 			if (static_cast<std::size_t>(data.size()) < sizeof(quint32)) {
-				throw packagelossutils::exceptions::ProtocolErrorException() << "Message had " << data.size() << " Bytes, we expected at least " << sizeof(quint32) << ".";
+				throw packetlossutils::exceptions::ProtocolErrorException() << "Message had " << data.size() << " Bytes, we expected at least " << sizeof(quint32) << ".";
 			}
 			messageId = qFromBigEndian<quint32>(data.constData());
 			ok = true;

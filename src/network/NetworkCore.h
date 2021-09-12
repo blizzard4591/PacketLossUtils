@@ -1,5 +1,5 @@
-#ifndef PACKAGELOSSUTILS_NETWORK_NETWORKCORE_H_
-#define PACKAGELOSSUTILS_NETWORK_NETWORKCORE_H_
+#ifndef PACKETLOSSUTILS_NETWORK_NETWORKCORE_H_
+#define PACKETLOSSUTILS_NETWORK_NETWORKCORE_H_
 
 #include <QNetworkDatagram>
 #include <QObject>
@@ -9,7 +9,7 @@
 #include "src/network/Message.h"
 #include "src/network/PingStats.h"
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 		class NetworkCore : public QObject {
 			Q_OBJECT

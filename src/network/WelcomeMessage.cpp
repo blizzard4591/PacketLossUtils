@@ -6,7 +6,7 @@
 #include <QString>
 #include <QStringList>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		WelcomeMessage::WelcomeMessage(quint32 version, quint64 uniqueId, quint32 pingIntervalInMs) : Message(toData(version, uniqueId, pingIntervalInMs)), m_version(version), m_uniqueId(uniqueId), m_pingIntervalInMs(pingIntervalInMs) {
@@ -26,21 +26,21 @@ namespace packagelossutils {
 			QStringList const parts = message.split('\n');
 
 			if (parts.size() != 7) {
-				throw packagelossutils::exceptions::ProtocolErrorException() << "Message from server had " << parts.size() << " parts, we expected 5. Message: '" << message.toStdString() << "'.";
+				throw packetlossutils::exceptions::ProtocolErrorException() << "Message from server had " << parts.size() << " parts, we expected 5. Message: '" << message.toStdString() << "'.";
 			}
 
 			bool ok = false;
 			quint32 const version = parts.at(2).toUInt(&ok);
 			if ((!ok) || (version != PROTOCOL_VERSION)) {
-				throw packagelossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand version '" << parts.at(2).toStdString() << "', we expected " << PROTOCOL_VERSION << ". Message: '" << message.toStdString() << "'.";
+				throw packetlossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand version '" << parts.at(2).toStdString() << "', we expected " << PROTOCOL_VERSION << ". Message: '" << message.toStdString() << "'.";
 			}
 			quint64 const uniqueId = parts.at(4).toULongLong(&ok);
 			if (!ok) {
-				throw packagelossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand uniqueID '" << parts.at(4).toStdString() << "'. Message: '" << message.toStdString() << "'.";
+				throw packetlossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand uniqueID '" << parts.at(4).toStdString() << "'. Message: '" << message.toStdString() << "'.";
 			}
 			quint32 const pingIntervalInMs = parts.at(6).toUInt(&ok);
 			if (!ok) {
-				throw packagelossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand ping interval '" << parts.at(6).toStdString() << "'. Message: '" << message.toStdString() << "'.";
+				throw packetlossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand ping interval '" << parts.at(6).toStdString() << "'. Message: '" << message.toStdString() << "'.";
 			}
 			return WelcomeMessage(version, uniqueId, pingIntervalInMs);
 		}

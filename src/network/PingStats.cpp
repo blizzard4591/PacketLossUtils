@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <iostream>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		PingStats::PingStats(QBitArray const& bitArray, int currentPosition, int storedBitCount) : PingStats(bitArray, currentPosition, storedBitCount, 0, 0) {
@@ -133,7 +133,7 @@ namespace packagelossutils {
 	}
 }
 
-QDataStream& operator<< (QDataStream& stream, const packagelossutils::network::PingStats& t) {
+QDataStream& operator<< (QDataStream& stream, const packetlossutils::network::PingStats& t) {
 	stream << t.getBitArray();
 	stream << t.getCurrentPosition();
 	stream << t.getStoredBitCount();

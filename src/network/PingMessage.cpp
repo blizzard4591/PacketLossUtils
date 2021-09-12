@@ -6,7 +6,7 @@
 #include <QString>
 #include <QStringList>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		PingMessage::PingMessage(quint64 uniqueId, quint64 counter, PingStats const& pingStats) : Message(toData(uniqueId, counter, pingStats)), m_uniqueId(uniqueId), m_counter(counter), m_pingStats(pingStats) {

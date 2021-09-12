@@ -1,12 +1,12 @@
-#ifndef PACKAGELOSSUTILS_NETWORK_CLIENT_H_
-#define PACKAGELOSSUTILS_NETWORK_CLIENT_H_
+#ifndef PACKETLOSSUTILS_NETWORK_CLIENT_H_
+#define PACKETLOSSUTILS_NETWORK_CLIENT_H_
 
 #include "src/network/NetworkCore.h"
 
 #include <QHostAddress>
 #include <QTimer>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 		class Client : public NetworkCore {
 			Q_OBJECT

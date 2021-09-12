@@ -1,11 +1,11 @@
-#ifndef PACKAGELOSSUTILS_EXCEPTIONS_EXCEPTIONMACROS_H_
-#define PACKAGELOSSUTILS_EXCEPTIONS_EXCEPTIONMACROS_H_
+#ifndef PACKETLOSSUTILS_EXCEPTIONS_EXCEPTIONMACROS_H_
+#define PACKETLOSSUTILS_EXCEPTIONS_EXCEPTIONMACROS_H_
 
 /*!
  * Macro to generate descendant exception classes. As all classes are nearly the same, this makes changing common
  * features much easier.
  */
-#define PACKAGELOSSUTILS_NEW_EXCEPTION(exception_name) namespace packagelossutils { \
+#define PACKETLOSSUTILS_NEW_EXCEPTION(exception_name) namespace packetlossutils { \
 namespace exceptions { \
 class exception_name : public BaseException { \
 public: \
@@ -29,4 +29,4 @@ virtual const char* name() const NOEXCEPT override { \
 } \
 }
 
-#endif /* PACKAGELOSSUTILS_EXCEPTIONS_EXCEPTIONMACROS_H_ */
+#endif /* PACKETLOSSUTILS_EXCEPTIONS_EXCEPTIONMACROS_H_ */

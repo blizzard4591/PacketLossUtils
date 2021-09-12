@@ -12,7 +12,7 @@
 #include <cstdint>
 
 int main(int argc, char *argv[]) {
-    if (!initializeLogging(PACKAGELOSSUTILS_LOGGING_MAX_FILESIZE, PACKAGELOSSUTILS_LOGGING_MAX_FILECOUNT)) {
+    if (!initializeLogging(PACKETLOSSUTILS_LOGGING_MAX_FILESIZE, PACKETLOSSUTILS_LOGGING_MAX_FILECOUNT)) {
         return -2;
     }
 
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 
 	LOGGER()->info("Qt library load paths are: {}", QCoreApplication::libraryPaths().join(", ").toStdString());
 
-	LOGGER()->info("Starting PackageLossUtils {}...", packagelossutils::utility::Version::longVersionString());
+	LOGGER()->info("Starting PacketLossUtils {}...", packetlossutils::utility::Version::longVersionString());
 
 	int result = 0;
 	try {
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 		parser.process(app);
 
 		if (parser.isSet(serverOption)) {
-			packagelossutils::network::Server server(12702, &app);
+			packetlossutils::network::Server server(12702, &app);
 
 			LOGGER()->debug("Starting event loop.");
 			result = app.exec();
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
 				QHostAddress address = hostInfo.addresses().first();
 				// use the first IP address
 				LOGGER_DEBUG("Using server '{}' with port {}. Input: '{}'", address.toString().toStdString(), serverPort, optionValue.toStdString());
-				packagelossutils::network::Client client(address, serverPort, 250, &app);
+				packetlossutils::network::Client client(address, serverPort, 250, &app);
 				if (parser.isSet(debugOption)) {
 					client.setDebugPingStats(true);
 				}

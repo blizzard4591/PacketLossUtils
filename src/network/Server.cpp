@@ -14,13 +14,13 @@
 #include "src/network/WelcomeMessage.h"
 #include "src/network/CloseMessage.h"
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		Server::Server(quint16 port, QObject* parent) : NetworkCore(parent), m_nextPingTime(0) {
 			if (!m_udpSocket->bind(QHostAddress::Any, port)) {
 				LOGGER()->error("Failed to bind to port {}!", port);
-				throw packagelossutils::exceptions::InvalidPortException() << "Failed to bind to port " << port << "!";
+				throw packetlossutils::exceptions::InvalidPortException() << "Failed to bind to port " << port << "!";
 			}
 		}
 
@@ -42,26 +42,30 @@ namespace packagelossutils {
 		void Server::onPingTimer() {
 			qint64 const currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
 			bool const skipMessage = currentMSecsSinceEpoch > (m_nextPingTime + MAX_TIME_LATE_MS);
-			QMapIterator<quint64, std::shared_ptr<ClientInfo>> i(m_clientInfos);
-			while (i.hasNext()) {
-				i.next();
-				std::shared_ptr<ClientInfo> const clientInfo = i.value();
-				++clientInfo->intervalCounter;
-				if ((clientInfo->intervalCounter * BASE_TIMER_INTERVAL) >= clientInfo->interval) {
-					PingMessage pingMessage(i.key(), clientInfo->messageCounter, clientInfo->pingStats);
-					++clientInfo->messageCounter;
-					clientInfo->intervalCounter = 0;
-					if (!skipMessage) {
-						m_udpSocket->writeDatagram(pingMessage.getData(), clientInfo->address, clientInfo->port);
-						clientInfo->pingStats.addPacketSent();
-						LOGGER_DEBUG("Sent ping #{} to client #{}.", clientInfo->messageCounter - 1, i.key());
-					} else {
-						LOGGER()->warn("PingTimer was delayed, skipping ping #{} to client #{}.", clientInfo->messageCounter - 1, i.key());
+			qint64 const numPingsMissed = (std::abs(currentMSecsSinceEpoch - m_nextPingTime) / BASE_TIMER_INTERVAL) + 1;
+
+			for (qint64 i = 0; i < numPingsMissed; ++i) {
+				QMapIterator<quint64, std::shared_ptr<ClientInfo>> it(m_clientInfos);
+				while (it.hasNext()) {
+					it.next();
+					std::shared_ptr<ClientInfo> const clientInfo = it.value();
+					++clientInfo->intervalCounter;
+					if ((clientInfo->intervalCounter * BASE_TIMER_INTERVAL) >= clientInfo->interval) {
+						PingMessage pingMessage(it.key(), clientInfo->messageCounter, clientInfo->pingStats);
+						++clientInfo->messageCounter;
+						clientInfo->intervalCounter = 0;
+						if (!skipMessage) {
+							m_udpSocket->writeDatagram(pingMessage.getData(), clientInfo->address, clientInfo->port);
+							clientInfo->pingStats.addPacketSent();
+							LOGGER_DEBUG("Sent ping #{} to client #{}.", clientInfo->messageCounter - 1, it.key());
+						} else {
+							LOGGER()->warn("PingTimer was delayed, skipping ping #{} to client #{}.", clientInfo->messageCounter - 1, it.key());
+						}
 					}
 				}
-			}
 
-			m_nextPingTime += currentMSecsSinceEpoch + BASE_TIMER_INTERVAL;
+				m_nextPingTime = currentMSecsSinceEpoch + BASE_TIMER_INTERVAL;
+			}
 		}
 
 		void Server::onTimeoutTimer() {

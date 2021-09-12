@@ -1,11 +1,11 @@
-#ifndef PACKAGELOSSUTILS_UTILITY_EXCEPTIONHANDLINGAPPLICATION_H_
-#define PACKAGELOSSUTILS_UTILITY_EXCEPTIONHANDLINGAPPLICATION_H_
+#ifndef PACKETLOSSUTILS_UTILITY_EXCEPTIONHANDLINGAPPLICATION_H_
+#define PACKETLOSSUTILS_UTILITY_EXCEPTIONHANDLINGAPPLICATION_H_
 
 #include <QCoreApplication>
 #include <QObject>
 #include <QEvent>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace utility {
 
 		class ExceptionHandlingApplication : public QCoreApplication {

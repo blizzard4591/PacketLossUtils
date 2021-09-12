@@ -16,7 +16,7 @@
 #include <iostream>
 
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		Client::Client(QHostAddress const& address, quint16 port, quint32 interval, QObject* parent) : NetworkCore(parent), m_serverHostAddress(address), m_serverPort(port), 
@@ -27,7 +27,7 @@ namespace packagelossutils {
 		{
 			//
 			if (!QObject::connect(&m_timerStats, SIGNAL(timeout()), this, SLOT(onStatsTimer()))) {
-				throw packagelossutils::exceptions::InternalErrorException() << "Failed to bind onStatsTimer() on Timer!";
+				throw packetlossutils::exceptions::InternalErrorException() << "Failed to bind onStatsTimer() on Timer!";
 			}
 
 			LOGGER_DEBUG("Client configured for {}:{} with unique ID {} and interval {}.", m_serverHostAddress.toString().toStdString(), m_serverPort, m_uniqueId, m_interval);
@@ -87,28 +87,25 @@ namespace packagelossutils {
 		}
 
 		void Client::onPingTimer() {
+			LOGGER_DEBUG("PING TIMER");
 			qint64 const currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
 			bool const skipMessage = currentMSecsSinceEpoch > (m_nextPingTime + MAX_TIME_LATE_MS);
-			if (QDateTime::currentMSecsSinceEpoch() > (m_nextPingTime + MAX_TIME_LATE_MS)) {
+			qint64 const numPingsMissed = (std::abs(currentMSecsSinceEpoch - m_nextPingTime) / m_interval) + 1;
+			
+			for (qint64 i = 0; i < numPingsMissed; ++i) {
+				PingMessage pingMessage(m_uniqueId, m_messageCounter, m_otherStats);
 				++m_messageCounter;
-				m_nextPingTime += m_interval;
 
-				LOGGER()->warn("PingTimer was delayed, skipping!");
-				return;
+				if (!skipMessage) {
+					m_udpSocket->writeDatagram(pingMessage.getData(), m_serverHostAddress, m_serverPort);
+					m_clientStats.addPacketSent();
+					LOGGER_DEBUG("Sent ping #{} to server.", m_messageCounter - 1);
+				} else {
+					LOGGER()->warn("PingTimer was delayed, skipping ping #{} to server.", m_messageCounter - 1);
+				}
+
+				m_nextPingTime = currentMSecsSinceEpoch + m_interval;
 			}
-
-			PingMessage pingMessage(m_uniqueId, m_messageCounter, m_otherStats);
-			++m_messageCounter;
-
-			if (!skipMessage) {
-				m_udpSocket->writeDatagram(pingMessage.getData(), m_serverHostAddress, m_serverPort);
-				m_clientStats.addPacketSent();
-				LOGGER_DEBUG("Sent ping #{} to server.", m_messageCounter - 1);
-			} else {
-				LOGGER()->warn("PingTimer was delayed, skipping ping #{} to server.", m_messageCounter - 1);
-			}
-
-			m_nextPingTime += currentMSecsSinceEpoch + m_interval;
 		}
 		
 		void Client::onTimeoutTimer() {
@@ -122,7 +119,7 @@ namespace packagelossutils {
 		}
 
 		void Client::onStatsTimer() {
-			LOGGER()->info("------------------------");
+			LOGGER()->info("----------------------------------------------------------------------");
 			LOGGER()->info("Transmission rate INCOMING (10s/1min/5min): {:.3f}% / {:.3f}% / {:.3f}%)", m_clientStats.getPercentReceivedOverTime((10ul * 1000ul) / m_interval), m_clientStats.getPercentReceivedOverTime((60ul * 1000ul) / m_interval), m_clientStats.getPercentReceivedOverTime((5ul * 60ul * 1000ul) / m_interval));
 			LOGGER()->info("Transmission rate OUTGOING (10s/1min/5min): {:.3f}% / {:.3f}% / {:.3f}%)", m_otherStats.getPercentReceivedOverTime((10ul * 1000ul) / m_interval), m_otherStats.getPercentReceivedOverTime((60ul * 1000ul) / m_interval), m_otherStats.getPercentReceivedOverTime((5ul * 60ul * 1000ul) / m_interval));
 			if (m_doPingStatDebug) {

@@ -1,9 +1,9 @@
-#ifndef PACKAGELOSSUTILS_NETWORK_WELCOMEMESSAGE_H_
-#define PACKAGELOSSUTILS_NETWORK_WELCOMEMESSAGE_H_
+#ifndef PACKETLOSSUTILS_NETWORK_WELCOMEMESSAGE_H_
+#define PACKETLOSSUTILS_NETWORK_WELCOMEMESSAGE_H_
 
 #include "src/network/Message.h"
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		class WelcomeMessage : public Message {

@@ -1,31 +1,31 @@
 #include "src/utility/Version.h"
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace utility {
 
 		// The major version of PACKAGELOSSUTILS
-		const unsigned Version::versionMajor = @PACKAGELOSSUTILS_CPP_VERSION_MAJOR@;
+		const unsigned Version::versionMajor = @PACKETLOSSUTILS_CPP_VERSION_MAJOR@;
 
 		// The minor version of PACKAGELOSSUTILS
-		const unsigned Version::versionMinor = @PACKAGELOSSUTILS_CPP_VERSION_MINOR@;
+		const unsigned Version::versionMinor = @PACKETLOSSUTILS_CPP_VERSION_MINOR@;
 
 		// The patch version of PACKAGELOSSUTILS
-		const unsigned Version::versionPatch = @PACKAGELOSSUTILS_CPP_VERSION_PATCH@;
+		const unsigned Version::versionPatch = @PACKETLOSSUTILS_CPP_VERSION_PATCH@;
 
 		// The short hash of the git commit this build is based on
-		const std::string Version::gitRevisionHash = "@PACKAGELOSSUTILS_CPP_VERSION_HASH@";
+		const std::string Version::gitRevisionHash = "@PACKETLOSSUTILS_CPP_VERSION_HASH@";
 
 		// How many commits passed since the last tag was set
-		const unsigned Version::commitsAhead = @PACKAGELOSSUTILS_CPP_VERSION_COMMITS_AHEAD@;
+		const unsigned Version::commitsAhead = @PACKETLOSSUTILS_CPP_VERSION_COMMITS_AHEAD@;
 
 		// "0" iff no files were modified in the checkout, "1" else
-		const unsigned Version::dirty = @PACKAGELOSSUTILS_CPP_VERSION_DIRTY@;
+		const unsigned Version::dirty = @PACKETLOSSUTILS_CPP_VERSION_DIRTY@;
 
 		// The system which has compiled PACKAGELOSSUTILS
 		const std::string Version::systemName = "@CMAKE_SYSTEM_NAME@";
 
 		// The size of a pointer of the system that has compiled PACKAGELOSSUTILS
-		const std::string Version::systemPtrSize = "@PACKAGELOSSUTILS_CPP_POINTER_SIZE@";
+		const std::string Version::systemPtrSize = "@PACKETLOSSUTILS_CPP_POINTER_SIZE@";
 
 		// The system version which has compiled PACKAGELOSSUTILS
 		const std::string Version::systemVersion = "@CMAKE_SYSTEM_VERSION@";
@@ -40,7 +40,7 @@ namespace packagelossutils {
 #endif
 
 		// The compiler version that was used to build PACKAGELOSSUTILS
-		const std::string Version::cxxCompiler = "@PACKAGELOSSUTILS_COMPILED_BY@ @CMAKE_CXX_COMPILER_VERSION@";
+		const std::string Version::cxxCompiler = "@PACKETLOSSUTILS_COMPILED_BY@ @CMAKE_CXX_COMPILER_VERSION@";
 
 	}
 }

@@ -1,10 +1,10 @@
-#ifndef PACKAGELOSSUTILS_NETWORK_PINGMESSAGE_H_
-#define PACKAGELOSSUTILS_NETWORK_PINGMESSAGE_H_
+#ifndef PACKETLOSSUTILS_NETWORK_PINGMESSAGE_H_
+#define PACKETLOSSUTILS_NETWORK_PINGMESSAGE_H_
 
 #include "src/network/Message.h"
 #include "src/network/PingStats.h"
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		class PingMessage : public Message {

@@ -15,7 +15,7 @@
 #include <QDateTime>
 #include <QNetworkDatagram>
 
-namespace packagelossutils {
+namespace packetlossutils {
 	namespace network {
 
 		NetworkCore::NetworkCore(QObject* parent) : QObject(parent),
@@ -23,14 +23,14 @@ namespace packagelossutils {
 			//
 			m_udpSocket = std::make_unique<QUdpSocket>();
 			if (!QObject::connect(m_udpSocket.get(), SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()))) {
-				throw packagelossutils::exceptions::InternalErrorException() << "Failed to bind readyRead() on UDP Socket!";
+				throw packetlossutils::exceptions::InternalErrorException() << "Failed to bind readyRead() on UDP Socket!";
 			}
 
 			if (!QObject::connect(&m_timerPing, SIGNAL(timeout()), this, SLOT(onPingTimer()))) {
-				throw packagelossutils::exceptions::InternalErrorException() << "Failed to bind onPingTimer() on Timer!";
+				throw packetlossutils::exceptions::InternalErrorException() << "Failed to bind onPingTimer() on Timer!";
 			}
 			if (!QObject::connect(&m_timerTimeout, SIGNAL(timeout()), this, SLOT(onTimeoutTimer()))) {
-				throw packagelossutils::exceptions::InternalErrorException() << "Failed to bind onTimeoutTimer() on Timer!";
+				throw packetlossutils::exceptions::InternalErrorException() << "Failed to bind onTimeoutTimer() on Timer!";
 			}
 		}
 
