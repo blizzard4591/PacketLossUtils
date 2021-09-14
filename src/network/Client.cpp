@@ -8,6 +8,7 @@
 #include "src/network/PingMessage.h"
 #include "src/network/CloseMessage.h"
 
+#include <QCoreApplication>
 #include <QDateTime>
 #include <QRandomGenerator>
 #include <QThread>
@@ -83,6 +84,8 @@ namespace packetlossutils {
 			m_timerStats.setInterval(2000);
 			m_timerStats.start();
 
+			m_isConnected = true;
+
 			return true;
 		}
 
@@ -131,6 +134,22 @@ namespace packetlossutils {
 				}
 				std::cout << QString(result.toHex()).toStdString() << std::endl;
 			}
+		}
+
+		void Client::onSigIntReceived() {
+			LOGGER_DEBUG("Client::onSigIntReceived() called.");
+			if (m_isConnected) {
+				LOGGER()->info("Sending disconnect info to server.");
+				CloseMessage closeMessage(m_uniqueId, CloseMessage::REASON_QUIT);
+				m_udpSocket->writeDatagram(closeMessage.getData(), m_serverHostAddress, m_serverPort);
+
+				m_isConnected = false;
+				m_timerPing.stop();
+				m_timerTimeout.stop();
+				m_timerStats.stop();
+			}
+
+			QCoreApplication::exit(0);
 		}
 
 		void Client::receivedMessage(QHostAddress const& address, quint16 port, std::shared_ptr<Message> const& message) {

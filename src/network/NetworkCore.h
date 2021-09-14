@@ -22,6 +22,8 @@ namespace packetlossutils {
 			void readPendingDatagrams();
 			virtual void onPingTimer() = 0;
 			virtual void onTimeoutTimer() = 0;
+
+			virtual void onSigIntReceived() = 0;
 		protected:
 			std::unique_ptr<QUdpSocket> m_udpSocket;
 

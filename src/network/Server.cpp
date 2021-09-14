@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <QCoreApplication>
 #include <QDateTime>
 #include <QNetworkDatagram>
 
@@ -115,6 +116,21 @@ namespace packetlossutils {
 			}
 		}
 
+		void Server::onSigIntReceived() {
+			LOGGER()->info("Sending disconnect info to clients.");
+			QMapIterator<quint64, std::shared_ptr<ClientInfo>> i(m_clientInfos);
+			while (i.hasNext()) {
+				i.next();
+				std::shared_ptr<ClientInfo> const clientInfo = i.value();
+				CloseMessage closeMessage(i.key(), CloseMessage::REASON_QUIT);
+				m_udpSocket->writeDatagram(closeMessage.getData(), clientInfo->address, clientInfo->port);
+			}
+			m_clientInfos.clear();
+			startOrStopTimersIfNeeded();
+
+			QCoreApplication::exit(0);
+		}
+
 		void Server::receivedMessage(QHostAddress const& address, quint16 port, std::shared_ptr<Message> const& message) {
 			Message::MessageType const messageType = message->getMessageType();
 			LOGGER_DEBUG("Server received datagram of type {} from {}:{}.", static_cast<int>(messageType), address.toString().toStdString(), port);
@@ -152,6 +168,8 @@ namespace packetlossutils {
 					clientInfo->timeOfLastRealMessageFromOther = QDateTime::currentMSecsSinceEpoch();
 				} else {
 					LOGGER()->error("Received a ping from Client {}, which we do not know.", uniqueId);
+					CloseMessage closeMessage(uniqueId, CloseMessage::REASON_UNSOLICITED);
+					m_udpSocket->writeDatagram(closeMessage.getData(), address, port);
 				}
 			} else if (messageType == Message::MessageType::MSGTYPE_WELCOME) {
 				std::shared_ptr<WelcomeMessage> const welcomeMessage = std::dynamic_pointer_cast<WelcomeMessage>(message);

@@ -21,6 +21,8 @@ namespace packetlossutils {
 			virtual void onPingTimer() override;
 			virtual void onTimeoutTimer() override;
 			void onStatsTimer();
+
+			virtual void onSigIntReceived() override;
 		protected:
 			QHostAddress const m_serverHostAddress;
 			quint16 const m_serverPort;

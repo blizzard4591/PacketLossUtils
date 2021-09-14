@@ -20,6 +20,8 @@ namespace packetlossutils {
 		public slots:
 			virtual void onPingTimer() override;
 			virtual void onTimeoutTimer() override;
+
+			virtual void onSigIntReceived() override;
 		protected:
 
 			struct ClientInfo {

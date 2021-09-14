@@ -4,6 +4,7 @@
 #include <QHostInfo>
 
 #include "Init.h"
+#include "ExceptionHandlingApplication.h"
 #include "src/network/Client.h"
 #include "src/network/Server.h"
 #include "src/utility/Version.h"
@@ -41,7 +42,7 @@ int main(int argc, char *argv[]) {
 
 	int result = 0;
 	try {
-		QCoreApplication app(argc, argv);
+		packetlossutils::utility::ExceptionHandlingApplication app(argc, argv);
 		
 		QCommandLineParser parser;
 		parser.setApplicationDescription("PackageLoss Utilities");
@@ -67,6 +68,10 @@ int main(int argc, char *argv[]) {
 
 		if (parser.isSet(serverOption)) {
 			packetlossutils::network::Server server(12702, &app);
+			if (!QObject::connect(&app, SIGNAL(onSigInt()), &server, SLOT(onSigIntReceived()))) {
+				LOGGER()->error("Failed to connect SIGINT signal to server!");
+				return -4;
+			}
 
 			LOGGER()->debug("Starting event loop.");
 			result = app.exec();
@@ -86,6 +91,11 @@ int main(int argc, char *argv[]) {
 				// use the first IP address
 				LOGGER_DEBUG("Using server '{}' with port {}. Input: '{}'", address.toString().toStdString(), serverPort, optionValue.toStdString());
 				packetlossutils::network::Client client(address, serverPort, 250, &app);
+				if (!QObject::connect(&app, SIGNAL(onSigInt()), &client, SLOT(onSigIntReceived()))) {
+					LOGGER()->error("Failed to connect SIGINT signal to client!");
+					return -4;
+				}
+
 				if (parser.isSet(debugOption)) {
 					client.setDebugPingStats(true);
 				}
