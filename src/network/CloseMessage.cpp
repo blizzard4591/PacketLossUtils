@@ -26,7 +26,7 @@ namespace packetlossutils {
 			}
 
 			bool ok = false;
-			quint64 const uniqueId = parts.at(0).toULongLong();
+			quint64 const uniqueId = parts.at(0).toULongLong(&ok);
 			if (!ok) {
 				throw packetlossutils::exceptions::ProtocolErrorException() << "Could not parse message from server, could not understand uniqueID '" << parts.at(0).toStdString() << "'. Message: '" << message.toStdString() << "'.";
 			}

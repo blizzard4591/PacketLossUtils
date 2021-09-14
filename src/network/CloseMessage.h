@@ -22,6 +22,7 @@ namespace packetlossutils {
 
 			constexpr static quint32 REASON_QUIT = 0x1ul;
 			constexpr static quint32 REASON_TIMEOUT = 0x2ul;
+			constexpr static quint32 REASON_UNSOLICITED = 0x3ul;
 		protected:
 			static QByteArray toData(quint64 uniqueId, quint32 reason);
 		private:
