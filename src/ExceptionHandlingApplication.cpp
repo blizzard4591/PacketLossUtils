@@ -31,8 +31,11 @@ namespace packetlossutils {
 		}
 
 		bool ExceptionHandlingApplication::handleSignal(int signal) {
-			emit onSigInt();
-			return true;
+			if (signal == SignalHandler::SIGNALS::SIG_INT) {
+				emit onSigInt();
+				return true;
+			}
+			return false;
 		}
 
 	}
