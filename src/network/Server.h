@@ -1,11 +1,13 @@
 #ifndef PACKETLOSSUTILS_NETWORK_SERVER_H_
 #define PACKETLOSSUTILS_NETWORK_SERVER_H_
 
-#include "src/network/NetworkCore.h"
-#include "src/network/PingStats.h"
+#include <memory>
 
 #include <QMap>
 #include <QTimer>
+
+#include "src/network/NetworkCore.h"
+#include "src/network/PingStats.h"
 
 namespace packetlossutils {
 	namespace network {

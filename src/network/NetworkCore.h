@@ -6,6 +6,8 @@
 #include <QTimer>
 #include <QUdpSocket>
 
+#include <memory>
+
 #include "src/network/Message.h"
 #include "src/network/PingStats.h"
 
